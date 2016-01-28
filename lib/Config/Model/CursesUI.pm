@@ -11,17 +11,6 @@ use warnings ;
 use Config::Model::ObjTreeScanner ;
 use Curses::UI ;
 
-use Config::Model::Exception ;
-use Exception::Class 
-    (
-        'Config::Model::CursesUI::AbortWizard'
-        => {
-            isa => 'Config::Model::Exception::Any',
-            description => 'wizard found a highlighted item' ,
-            fields =>  [qw/object slot index info/]
-        },
-    ) ;
-
 our $VERSION = '1.104';
 
 my @help_settings = qw/-bg green -fg black -border 1 
@@ -997,9 +986,9 @@ sub try_it {
         warn "try_it: call to sub succeeded\n" if $verb_wiz ;
     } ;
 
-    my $e ;
-    if ($e = Config::Model::Exception::User->caught()) {
-        my $oops = $e->error ;
+    my $e = $@;
+    if (ref($e) and $e -> isa('Config::Model::Exception::User')) {
+        my $oops = $e->full_message ;
         $oops =~ s/\t//g;
         chomp($oops) ;
         $self->{cui}->error(-message => $oops ) ;
@@ -1010,7 +999,6 @@ sub try_it {
         $self->{cui}->fatalerror("try_it: $@") ;
         # does not return ...
     }
-    ;
 }
 
 sub display_enum {
@@ -1715,7 +1703,8 @@ sub wizard {
         $self->wiz_walk( $stop_on_important , $root) ;
     } ;
 
-    if (Config::Model::CursesUI::AbortWizard->caught()) {
+    my $e = $@;
+    if ( ref($e) and $e->isa('Config::Model::CursesUI::AbortWizard')) {
         # ignored
     }
     elsif ($@) {
@@ -1865,18 +1854,25 @@ sub wiz_walk {
 
     my $result;
     eval {$self->{wizard}->start ;} ;
+    my $e = $@;
 
-    if (my $e = Config::Model::CursesUI::AbortWizard->caught()) {
-        $e -> throw ;           # propagate up
+    if (ref($e) and  $e->isa('Config::Model::CursesUI::AbortWizard')) {
+        $e -> rethrow ;           # propagate up
     }
-    elsif ($@) {
+    elsif ($e) {
         # really die
-        warn "$@" ;
-        $self->{cui}->fatalerror("display_view_list: $@") ;
+        warn "$e" ;
+        $self->{cui}->fatalerror("display_view_list: $e") ;
     }
 
     return $result ;
 }
+
+package Config::Model::CursesUI::AbortWizard;
+use Mouse;
+extends 'Config::Model::Exception';
+
+sub _desc { 'wizard found a highlighted item' }
 
 1;
 __END__
