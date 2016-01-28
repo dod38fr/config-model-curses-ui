@@ -1,8 +1,15 @@
+2016-01-28  Dominique Dumont  <domi.dumont@free.fr> v1.105
+
+  * CursesUI:
+    * no longer use Exception::Class
+    * warnings are no longer fatal (bad idea...)
+  * Fixed LGPL words (added "General", tx gregoa)
+
 2011-03-01  Dominique Dumont  <domi.dumont@free.fr> v1.104
 
 	* Build.PL: depends on Config::Model 1.233.
 
-	* lib/Config/Model/CursesUI.pm: Removed usage of *_no_value_cheack
+	* lib/Config/Model/CursesUI.pm: Removed usage of *_no_value_check
 	and replaced them with explicit check parameters. Removed long dead
 	enum_integer value_type (Debian Closes: #613970).
 
@@ -21,7 +28,7 @@
 
 	* lib/Config/Model/CursesUI.pm (all): Remove dependency on
 	Error (fix RT 42142)
-	
+
 2008-10-21  Dominique Dumont  <dominique.dumont@hp.com> v1.101
 
 	* lib/Config/Model/CursesUI.pm: Added screen to edit ordered
