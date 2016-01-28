@@ -11,7 +11,7 @@ use warnings ;
 use Config::Model::ObjTreeScanner ;
 use Curses::UI ;
 
-our $VERSION = '1.104';
+our $VERSION = '1.105';
 
 my @help_settings = qw/-bg green -fg black -border 1 
                        -titlereverse 0
