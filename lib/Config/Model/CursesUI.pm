@@ -6,7 +6,7 @@ require Exporter;
 use strict ;
 use Config::Model::Exception ;
 use Carp;
-use warnings FATAL => "all";
+use warnings ;
 
 use Config::Model::ObjTreeScanner ;
 use Curses::UI ;
