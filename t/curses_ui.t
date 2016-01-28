@@ -8,22 +8,27 @@ use Data::Dumper;
 use Config::Model ;
 use Config::Model::CursesUI ;
 use Log::Log4perl qw(:easy) ;
-
-use strict ;
-
-BEGIN { plan tests => 3;} 
-
-use vars qw/$hw/;
 use Curses::UI ;
 
+use strict ;
+use vars qw/$hw/;
+
 my $arg = shift || '';
+my ( $log, $show ) = (0) x 2;
 
-my $trace = $arg =~ /t/ ? 1 : 0 ;
-$::verbose          = 1 if $arg =~ /v/;
-$::debug            = 1 if $arg =~ /d/;
+my $trace = $arg =~ /t/ ? 1 : 0;
+$log  = 1 if $arg =~ /l/;
+$show = 1 if $arg =~ /s/;
 
-my $log             = 1 if $arg =~ /l/;
-Log::Log4perl->easy_init($log ? $TRACE: $WARN);
+my $home = $ENV{HOME} || "";
+my $log4perl_user_conf_file = "$home/.log4config-model";
+
+if ( $log and -e $log4perl_user_conf_file ) {
+    Log::Log4perl::init($log4perl_user_conf_file);
+}
+else {
+    Log::Log4perl->easy_init( $log ? $WARN : $ERROR );
+}
 
 Config::Model::Exception::Any->Trace(1) if $arg =~ /e/;
 
@@ -59,3 +64,5 @@ if ($arg =~ /i/ ) {
 close FH ;
 
 ok(1,"done") ;
+
+done_testing;
