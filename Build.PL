@@ -21,22 +21,22 @@ use Module::Build;
 
 require 5.008 ;
 
-my $build = Module::Build->new
-  (
-   module_name => 'Config::Model::CursesUI',
-   license => 'lgpl',
-   dist_abstract => "Curses interface to edit config data through Config::Model",
-   dist_author  => "Dominique Dumont (ddumont at cpan dot org)",
-   requires => {
+my $build = Module::Build->new (
+    module_name => 'Config::Model::CursesUI',
+    license => 'lgpl',
+    dist_abstract => "Curses interface to edit config data through Config::Model",
+    dist_author  => "Dominique Dumont (ddumont at cpan dot org)",
+    requires => {
 		'Config::Model'    => '1.233',
 		'Exception::Class' => 0,
 		'Curses::UI'       => '0.9606',
-	       },
-   build_requires => {
-		      'Log::Log4perl'    => 0 ,
-		     },
-   add_to_cleanup => [qw/stderr.log wr_data/] ,
-  );
+    },
+    configure_requires => { 'Module::Build' => 0.42 },
+    build_requires => {
+        'Log::Log4perl'    => 0 ,
+    },
+    add_to_cleanup => [qw/stderr.log wr_data/] ,
+);
 
 $build->add_build_element('pl');
 $build->create_build_script;
