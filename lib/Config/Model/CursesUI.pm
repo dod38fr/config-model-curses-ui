@@ -35,8 +35,6 @@ sub new {
         #-debug => 1
     );
 
-    $self->{experience} = $args{experience} || 'beginner' ;
-
     my %cb_set 
         = (
             #                             scanner self 
@@ -60,7 +58,6 @@ sub new {
         $self->{scan} = Config::Model::ObjTreeScanner
             -> new (
                 fallback   => 'all',
-                experience => $self->{experience},
                 %cb_set ,
             ) ;
     };
@@ -431,12 +428,6 @@ sub display_node_content {
         my $help = $node->get_help($sel) ;
         $help = "no help for $sel" unless $help ;
         $helpw->text($help)  ;
-        if ($self->{experience} ne 'beginner') {
-            my $p = $node
-                -> get_element_property(property => 'experience',
-                                        element  => $sel) ;
-            $permw->text("experience: $p");
-        }
         my $type = $node->element_type($sel) ;
         my $elt = $node->fetch_element($sel) ;
         my $v_str = '' ;
@@ -1603,7 +1594,7 @@ sub display_view_list {
 
     my $leaf_cb = ($select eq 'audit') ? $audit_cb : $std_cb ;
 
-    my @scan_args = ( experience       => $self->{experience},
+    my @scan_args = (
                       fallback         => 'all',
                       hash_element_cb  => $hash_cb ,
                       leaf_cb          => $leaf_cb ,
@@ -1844,7 +1835,7 @@ sub wiz_walk {
         } ;
     }
 
-    my @wiz_args = (experience        => $self->{experience},
+    my @wiz_args = (
                     hash_element_cb   => $hash_element_cb ,
                     %cb_hash 
                 );
@@ -1894,7 +1885,6 @@ instance_name   => 'yyy');
 # create dialog
 my $dialog = Config::Model::CursesUI-> new
 (
-experience => 'beginner', # or 'advanced' # 
 ) ;
 
 # start never returns
@@ -1914,12 +1904,6 @@ work as expected.
 The constructor accepts the following parameters:
 
 =over
-
-=item experience
-
-Specifies the experience level of the user (default:
-C<beginner>). The experience can be C<master advanced
-beginner>.
 
 =item load
 
