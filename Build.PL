@@ -27,7 +27,7 @@ my $build = Module::Build->new (
     dist_abstract => "Curses interface to edit config data through Config::Model",
     dist_author  => "Dominique Dumont (ddumont at cpan dot org)",
     requires => {
-		'Config::Model'    => '1.233',
+		'Config::Model'    => '2.095',
 		'Exception::Class' => 0,
 		'Curses::UI'       => '0.9606',
     },

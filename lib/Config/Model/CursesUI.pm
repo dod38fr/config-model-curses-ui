@@ -8,6 +8,7 @@ use Config::Model::Exception ;
 use Carp;
 use warnings ;
 
+use Config::Model 2.095; # for get_help_as_text
 use Config::Model::ObjTreeScanner ;
 use Curses::UI ;
 
@@ -425,7 +426,7 @@ sub display_node_content {
     my $lb_sel_change = sub {
         my $sel = ($listbox->get_active_value)[0];
         return unless defined $sel ; # may happen with empty node
-        my $help = $node->get_help($sel) ;
+        my $help = $node->get_help_as_text($sel) ;
         $help = "no help for $sel" unless $help ;
         $helpw->text($help)  ;
         my $type = $node->element_type($sel) ;
@@ -480,7 +481,7 @@ sub display_node_content {
     my $help = {
 		-label => '< Help on node >',
 		-onpress => sub {
-		    my $help= $node->get_help ;
+		    my $help= $node->get_help_as_text ;
 		    $help = "Sorry, no help available" 
                 unless defined $help;
 		    $self->{cui}->dialog($help) ;
@@ -746,7 +747,7 @@ sub layout_hash {
                            '-y' => 7, '-x' => 41, -width => 38,
                            '-title' => 'Help on element',
                            @help_settings);
-    my $help = $node->get_help($element) || "no help for $element" ;
+    my $help = $node->get_help_as_text($element) || "no help for $element" ;
     $helpw->text($help)  ;
 
     return $listbox ;
@@ -804,14 +805,14 @@ sub layout_checklist_info {
                                '-x' => 42 ,
                                '-y' => $$yr ,
                                -width => 35,
-                               -text => $node->get_help($element) ,
+                               -text => $node->get_help_as_text($element) ,
                                '-title' => 'Help on value',
                                @help_settings ) ;
 
     my $help_update = sub {
         my $widget = shift ;
         my $choice = $values[$widget->get_active_id] ;
-        $help_w->text($check_list_obj->get_help($choice)) ;
+        $help_w->text($check_list_obj->get_help_as_text($choice)) ;
     } ;
 
     return ($cur_val_w,$help_update) ;
@@ -1015,7 +1016,7 @@ sub layout_enum_value {
     my ($orig_value,$current_value_widget,$help) = 
         $self->value_info($win,$leaf, 40, 1) ;
 
-    $help -> text ($leaf->get_help($orig_value) ) ;
+    $help -> text ($leaf->get_help_as_text($orig_value) ) ;
 
     my $y = 0;
 
@@ -1070,7 +1071,7 @@ sub layout_enum_value {
 
     my $lb_sel_change = sub {
         my ($new) = $listbox->get_active_value;
-        $help ->text($leaf->get_help($new)) ;
+        $help ->text($leaf->get_help_as_text($new)) ;
     } ;
 
     $listbox = $win -> add ( undef, 'Listbox',
@@ -1120,7 +1121,7 @@ sub layout_boolean_value {
             $self->set_leaf_value($leaf , 0+$new ) ;
             $value = $new ;
             $current_value_widget->text( 0+$new ) ;
-            $help ->text($leaf->get_help($new ? '1' : '0')) ;
+            $help ->text($leaf->get_help_as_text($new ? '1' : '0')) ;
         }
     } ;
 
@@ -1722,7 +1723,7 @@ sub show_node_element_help {
     my $text = '' ;
 
     return $text unless defined $node ;
-    my $node_help = $node->get_help();
+    my $node_help = $node->get_help_as_text();
 
     my $element_name = $node->element_name() ; # may be undef for root class
     if ($node_help) {
@@ -1731,7 +1732,7 @@ sub show_node_element_help {
     }
 
     if (defined $element) {
-        my $element_help = $node->get_help($element);
+        my $element_help = $node->get_help_as_text($element);
         $text .= "$element:\n  $element_help\n" if $element_help ;
     }
 
