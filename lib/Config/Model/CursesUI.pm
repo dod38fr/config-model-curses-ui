@@ -1875,21 +1875,21 @@ Config::Model::CursesUI - Curses interface to edit config data
 
 =head1 SYNOPSIS
 
-use Config::Model ;
-use Config::Model::CursesUI ;
+ use Config::Model ;
+ use Config::Model::CursesUI ;
 
-my $model = Config::Model -> new ;
+ my $model = Config::Model -> new ;
 
-my $inst = $model->instance (root_class_name => 'XXX',
-instance_name   => 'yyy');
+ my $inst = $model->instance (
+    root_class_name => 'XXX',
+    instance_name   => 'yyy'
+ );
 
-# create dialog
-my $dialog = Config::Model::CursesUI-> new
-(
-) ;
+ # create dialog
+ my $dialog = Config::Model::CursesUI-> new () ;
 
-# start never returns
-$dialog->start($model) ;
+ # start never returns
+ $dialog->start($model) ;
 
 =head1 DESCRIPTION
 
