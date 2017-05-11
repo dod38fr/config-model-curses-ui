@@ -28,7 +28,6 @@ my $build = Module::Build->new (
     dist_author  => "Dominique Dumont (ddumont at cpan dot org)",
     requires => {
 		'Config::Model'    => '2.095',
-		'Exception::Class' => 0,
 		'Curses::UI'       => '0.9606',
     },
     configure_requires => { 'Module::Build' => 0.42 },
