@@ -23,7 +23,7 @@ require 5.008 ;
 
 my $build = Module::Build->new (
     module_name => 'Config::Model::CursesUI',
-    license => 'lgpl',
+    license => 'lgpl2',
     dist_abstract => "Curses interface to edit config data through Config::Model",
     dist_author  => "Dominique Dumont (ddumont at cpan dot org)",
     requires => {
